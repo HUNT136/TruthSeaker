@@ -25,7 +25,7 @@ export const n8nService = {
         link: data.url || '',
         inputType: data.type,
         timestamp: new Date().toISOString(),
-        source: 'TruthSeaker_Frontend'
+        source: 'TruthRevealed_Frontend'
       }, {
         headers: {
           'Content-Type': 'application/json'
