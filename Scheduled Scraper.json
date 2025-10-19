@@ -1,0 +1,124 @@
+{
+  "name": "Scheduled Scraper",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "hours"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -432,
+        -128
+      ],
+      "id": "b84ccc17-dd01-4b1c-9c4c-1fdfe53f5fec",
+      "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "url": "https://feeds.bbci.co.uk/news/world/rss.xml ",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {}
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {}
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -224,
+        -128
+      ],
+      "id": "f1a91afb-09f9-4723-b6ac-520a10d89d17",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "EMkGYJhDsghRxIhJ",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/EMkGYJhDsghRxIhJ",
+          "cachedResultName": "Main Workflow"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {}
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.3,
+      "position": [
+        -32,
+        -128
+      ],
+      "id": "3442dfc8-cc05-43b0-b4be-40926e959460",
+      "name": "Call 'Main Workflow'"
+    },
+    {
+      "parameters": {
+        "content": "Toggle this workflow to ACTIVE",
+        "height": 80,
+        "width": 224
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        96,
+        -304
+      ],
+      "typeVersion": 1,
+      "id": "1ee934eb-8ec9-4e06-9f23-5e6d4210b35f",
+      "name": "Sticky Note"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Call 'Main Workflow'",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "1014fae9-cb31-4a71-a3a8-12fd66f96766",
+  "meta": {
+    "instanceId": "809a276082a003850d8ecfd8970abfced5b68f6bd2116df975ebad904fc1cec8"
+  },
+  "id": "43scF9o1L6Xl0UYC",
+  "tags": []
+}

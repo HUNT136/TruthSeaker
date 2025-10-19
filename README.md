@@ -1,6 +1,6 @@
-# Getting Started with Create React App
+# TruthSeaker - AI-Powered Fact Checking App
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A React-based fact-checking application that uses n8n workflows and Google Gemini AI to verify news, claims, and information in real-time.
 
 ## Available Scripts
 

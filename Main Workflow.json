@@ -1,0 +1,228 @@
+{
+  "name": "Main Workflow",
+  "nodes": [
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Please act as a fact-checking agent. Analyze the following article content and classify it.\n\n**Article Title:** {{ $json[\"title\"] }}\n**Article Content:** {{ $json[\"contentSnippet\"] || $json[\"content:encodedSnippet\"] || $json[\"description\"] }}\n\nYour task is to:\n1. Identify the main claims made in the text.\n2. Determine if the content contains potential misinformation, disinformation, or is a hoax/conspiracy.\n3. Provide a final classification in JSON format. The JSON object should have two keys: \"classification\" (values: \"Verified\", \"Potential Misinformation\", \"Unverified\") and \"reason\" (a brief explanation for your classification).\n\nOutput ONLY the JSON object.",
+        "messages": {
+          "messageValues": [
+            {
+              "message": "Execute previous nodes to use input data"
+            }
+          ]
+        },
+        "batching": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.7,
+      "position": [
+        688,
+        -32
+      ],
+      "id": "65c07a35-87da-4792-aee3-efb07f67d2e7",
+      "name": "Basic LLM Chain",
+      "notesInFlow": false
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        768,
+        192
+      ],
+      "id": "0a55cc16-1b36-4822-8f9a-91bc06eaee4b",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "KymJvBZXDR1azIjk",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "13b08c02-bc7e-4937-bb71-b37d0e59bd0a",
+              "leftValue": "={{ $json[\"classification\"] }}",
+              "rightValue": "Misinformation",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1264,
+        96
+      ],
+      "id": "e55e4b2b-6a86-4dd2-abfe-e0e5a30ac09e",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "jsCode": "const responseString = $json.response;\nlet parsedData = {};\n\ntry {\n  // Clean the response string from markdown/code fences\n  const cleanedString = responseString.replace(/```json\\n|\\n```/g, '');\n  parsedData = JSON.parse(cleanedString);\n} catch (error) {\n  // If parsing fails, set a default to avoid errors\n  parsedData = { classification: 'Error', reason: 'Failed to parse AI response' };\n}\n\nreturn { ...$input.item.json, ...parsedData };"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1008,
+        -32
+      ],
+      "id": "57bd9ad0-c120-4145-9d17-7cdab4668cf8",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "sendTo": "preeom45@gmail.com",
+        "subject": "=Misinformation Alert: {{ $json[\"title\"] }}",
+        "message": "=<h1>Potential Misinformation Detected!</h1> <p>An article has been flagged by the detection system.</p> <p><strong>Title:</strong> {{ $json[\"title\"] }}</p> <p><strong>Source Link:</strong> <a href=\"{{ $json[\"link\"] }}\">Click here</a></p> <p><strong>Classification:</strong> {{ $json[\"classification\"] }}</p> <p><strong>Reason:</strong> {{ $json[\"reason\"] }}</p>",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        1488,
+        32
+      ],
+      "id": "b9346ade-17cc-41c1-b767-5a1a470bcc8a",
+      "name": "Send a message",
+      "webhookId": "fcffd473-7c88-4c55-82f3-d17a55f813ea",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "qKCqzGch4T4EJxNa",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "inputSource": "passthrough"
+      },
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        480,
+        -32
+      ],
+      "id": "0af93e8e-8ed1-4766-98d7-73073ee46345",
+      "name": "When Executed by Another Workflow"
+    },
+    {
+      "parameters": {
+        "content": "DO NOT Activate",
+        "height": 80,
+        "width": 150
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1296,
+        -192
+      ],
+      "typeVersion": 1,
+      "id": "e1387c35-fcce-46f3-afba-a930e29c305b",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "content": "Frontend can use the Production URL from the Frontend API Trigger workflow",
+        "height": 96,
+        "width": 192
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1408,
+        -80
+      ],
+      "typeVersion": 1,
+      "id": "7a66db1d-486f-4de6-afe1-71aec6224d80",
+      "name": "Sticky Note1"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Basic LLM Chain",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Basic LLM Chain": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When Executed by Another Workflow": {
+      "main": [
+        [
+          {
+            "node": "Basic LLM Chain",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "531606db-dbf1-4aab-8a40-39bb66833530",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "809a276082a003850d8ecfd8970abfced5b68f6bd2116df975ebad904fc1cec8"
+  },
+  "id": "EMkGYJhDsghRxIhJ",
+  "tags": []
+}

@@ -118,23 +118,37 @@ const Landing = () => {
             <div className={`left-content ${contentStep >= 1 ? 'visible' : ''}`}>
               <div className="brand-section">
                 <h1 className="main-title">
-                  <span className="truth">Truth</span><span className="only">Only</span>
+                  <span className="truth">Truth</span><span className="only">Seaker</span>
                 </h1>
-                <p className="tagline">Unveiling Truth in the Age of Information</p>
+                <p className="tagline">Verify News. Combat Misinformation.</p>
+                <p className="description">Our advanced AI-powered fact-checking platform helps you distinguish between reliable information and deceptive content.</p>
               </div>
               
               <div className="stats-grid">
                 <div className="stat-card">
-                  <div className="stat-number gradient-text">10M+</div>
-                  <div className="stat-label">Articles Verified</div>
+                  <div className="stat-icon">🔍</div>
+                  <div className="stat-title">Deep Analysis</div>
+                  <div className="stat-description">Comprehensive verification using multiple trusted sources</div>
                 </div>
                 <div className="stat-card">
-                  <div className="stat-number gradient-text">95%</div>
-                  <div className="stat-label">Accuracy Rate</div>
+                  <div className="stat-icon">⚡</div>
+                  <div className="stat-title">Instant Results</div>
+                  <div className="stat-description">Get fact-check results in seconds</div>
                 </div>
                 <div className="stat-card">
-                  <div className="stat-number gradient-text">50K+</div>
-                  <div className="stat-label">Active Users</div>
+                  <div className="stat-icon">🛡️</div>
+                  <div className="stat-title">Privacy First</div>
+                  <div className="stat-description">Your data stays secure and private</div>
+                </div>
+                <div className="stat-card">
+                  <div className="stat-icon">🤝</div>
+                  <div className="stat-title">Open and Honest</div>
+                  <div className="stat-description">Transparent methodology and reliable sources</div>
+                </div>
+                <div className="stat-card">
+                  <div className="stat-icon">📈</div>
+                  <div className="stat-title">Self-development</div>
+                  <div className="stat-description">Continuous improvement of our AI models</div>
                 </div>
               </div>
             </div>
@@ -144,8 +158,8 @@ const Landing = () => {
           <div className="right-panel">
             <div className="right-content">
               <div className={`content-section ${contentStep >= 2 ? 'visible' : ''}`}>
-                <h2>Verify News. Combat Misinformation.</h2>
-                <p>Our advanced AI-powered fact-checking platform helps you distinguish between reliable information and deceptive content.</p>
+                <h2>Start Fact-Checking</h2>
+                <p>Choose your verification method and get instant results powered by advanced AI technology.</p>
               </div>
 
               <div className={`features-section ${contentStep >= 3 ? 'visible' : ''}`}>
