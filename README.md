@@ -45,7 +45,7 @@ This project showcases **Agentic AI** - artificial intelligence that acts autono
 
 - Node.js 16+ and npm
 - Google Gemini API key
-- n8n instance (local or cloud)
+- n8n instance 
 
 ## 🔧 Installation
 
